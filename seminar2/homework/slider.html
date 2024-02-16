@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .slider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .img {
+            height: 400px;
+        }
+        .dots {
+            display: flex;
+            justify-content: center;
+        }
+        .dot {
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            border: solid 1px black;
+            margin: 4px;
+            cursor: pointer;
+        }
+        .dot-current {
+            background-color: black;
+        }
+    </style>
+    <title>Slider</title>
+</head>
+<body>
+    <div class="slider">
+        <div class="imgBox"></div>
+        <div class="buttons">
+            <button id="prev">Назад</button>
+            <button id="next">Вперед</button>
+        </div>
+        <div class="dots"></div>
+    </div>
+    <script>
+        // const fs = require('fs');
+        // const files = fs.readdirSync('/img/');
+        // console.log(files);
+
+        //         var directory = <path>;
+//                 var xmlHttp = new XMLHttpRequest();
+//                 xmlHttp.open('GET', directory, false); // false for synchronous request
+//                 xmlHttp.send(null);
+//                 var ret = xmlHttp.responseText;
+//                 var fileList = ret.split('\n');
+//                 for (i = 0; i < fileList.length; i++) {
+//     var fileinfo = fileList[i].split(' ');
+//                 if (fileinfo[0] == '201:') {
+//                     document.write(fileinfo[1] + "<br>");
+//                 document.write('<img src=\"' + directory + fileinfo[1] + '\"/>');
+//     }
+// }
+
+        const files = ['img/prod1.png', 'img/prod2.png', 'img/prod3.png'];
+        currentFileNumber = 0;
+        const imgBox = document.querySelector('.imgBox');
+        const image = document.createElement('img');
+        image.src = files[currentFileNumber];
+        image.className = 'img';
+        imgBox.appendChild(image);
+
+        const dots = document.querySelector('.dots');
+        for (let i = 0; i < files.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.id = i;
+            // console.log(dot.id);
+            dots.append(dot);
+        }
+        // console.log(dots);
+        const dotArray = document.querySelectorAll('.dot');
+        dotArray[0].classList.add('dot-current');
+
+        const prev = document.querySelector('#prev');
+        prev.addEventListener('click', () => {
+            if (currentFileNumber === 0) {
+                currentFileNumber = files.length - 1;
+            } else {
+                currentFileNumber--;
+            }
+            // console.log(currentFileNumber);
+            image.src = files[currentFileNumber];
+            imgBox.appendChild(image);
+
+            changeDot(currentFileNumber);
+        });
+
+        const next = document.querySelector('#next');
+        next.addEventListener('click', () => {
+            if (currentFileNumber === files.length - 1) {
+                currentFileNumber = 0;
+            } else {
+                currentFileNumber++;
+            }
+            // console.log(currentFileNumber);
+            image.src = files[currentFileNumber];
+            imgBox.appendChild(image);
+            
+            changeDot(currentFileNumber);
+        });
+
+        function changeDot (imgNumber) {
+            dotArray.forEach((element => {
+                element.classList.remove('dot-current');
+            }));
+            dotArray[imgNumber].classList.add('dot-current');
+        };
+
+        dots.addEventListener('click', (e) => {
+            changeDot(e.target.id);
+            image.src = files[e.target.id];
+        })
+    </script>
+</body>
+</html>
