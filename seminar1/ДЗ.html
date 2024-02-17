@@ -1,0 +1,69 @@
+ <style>
+        .class-schedule {
+            padding: 20px;
+        }
+        .class-item {
+            margin-bottom: 10px;
+        }
+    </style>
+    <div class="container">
+        <h1>Расписание занятий</h1>
+        <div id="class-schedule" class="class-schedule">
+
+        </div>
+    </div>
+
+
+<script>
+const classes = [
+    {
+        id: 1,
+        name: "Йога для начинающих",
+        time: "10:00 - 11:00",
+        maxParticipants: 15,
+        registered: 5
+    },
+    {
+        id: 2,
+        name: "Бодибилдинг",
+        time: "12:00 - 13:30",
+        maxParticipants: 10,
+        registered: 10
+    }
+];
+
+const displayClasses = () => {
+    const schedule = document.getElementById("class-schedule");
+    schedule.innerHTML = ""; 
+
+    classes.forEach((classItem) => {
+        const isFull = classItem.registered >= classItem.maxParticipants;
+        const classElement = `
+            <div class="class-item card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">${classItem.name}</h5>
+                    <p class="card-text">Время: ${classItem.time}</p>
+                    <p class="card-text">Записано участников: ${classItem.registered} из ${classItem.maxParticipants}</p>
+                    <button onclick="register(${classItem.id})" class="btn btn-primary" ${isFull ? "disabled" : ""}>Записаться</button>
+                    <button onclick="unregister(${classItem.id})" class="btn btn-secondary">Отменить запись</button>
+                </div>
+            </div>`;
+        schedule.innerHTML += classElement;
+    });
+};
+const register = (classId) => {
+    const classToRegister = classes.find((classItem) => classItem.id === classId);
+    if (classToRegister && classToRegister.registered < classToRegister.maxParticipants) {
+        classToRegister.registered++;
+        displayClasses();    }
+};
+
+// Функция для отмены записи на занятие
+const unregister = (classId) => {
+    const classToUnregister = classes.find((classItem) => classItem.id === classId);
+    if (classToUnregister && classToUnregister.registered > 0) {
+        classToUnregister.registered--;
+        displayClasses(); };
+    }
+document.addEventListener("DOMContentLoaded", displayClasses);
+</script>
